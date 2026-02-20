@@ -1,0 +1,20 @@
+categories:
+  Artificial_Intelligence:
+    Machine_Learning:
+      aliases: ["ML", "Predictive Modeling", "XGBoost", "Scikit-learn", "LightGBM"]
+    Natural_Language_Processing:
+      aliases: ["NLP", "Transformers", "BERT", "LLM", "Text Mining"]
+    AI_Governance:
+      aliases: ["AI Ethics", "Risk Management", "Responsible AI"]
+    AI_Strategy:
+      aliases: ["AI Roadmap", "Enterprise Transformation", "Center of Excellence", "CoE"]
+  
+  Data_Engineering:
+    Modern_Data_Stack:
+      aliases: ["Snowflake", "dbt", "Fivetran", "Data Warehouse"]
+    Data_Governance:
+      aliases: ["DAMA-DMBOK", "Data Stewardship", "Master Data Management", "MDM"]
+
+  Delivery_Management:
+    Agile:
+      aliases: ["Scrum", "Kanban", "SAFe", "Agile Delivery"]

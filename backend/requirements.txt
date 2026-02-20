@@ -1,0 +1,30 @@
+# MatchPoint backend — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# --- API framework ---
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# --- Data validation ---
+pydantic>=2.7.0
+
+# --- Document parsing ---
+python-pptx>=0.6.23
+
+# --- AI / LLM ---
+groq>=0.9.0
+
+# --- Embedding model ---
+sentence-transformers>=3.0.0
+
+# --- Vector index ---
+faiss-cpu>=1.8.0
+
+# --- Sparse index ---
+rank-bm25>=0.2.2
+
+# --- Scientific computing ---
+numpy>=1.26.0
+
+# --- Config ---
+pyyaml>=6.0.1

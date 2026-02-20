@@ -1,0 +1,17 @@
+# config.yaml
+
+system:
+  database_path: "./database/candidates.db"
+  faiss_dir: "./database/faiss_db"  
+  data_folder: "./data/raw_cv"
+
+llm:
+  extraction_model: "llama-3.1-8b-instant"  # Fast model for JSON extraction
+  reasoning_model: "llama-3.3-70b-versatile"  # Smart model for matching (used later)
+  temperature: 0.0                    # Keep 0 for consistent data extraction
+  max_tokens: 1000
+
+
+retrieval:
+  top_k_chunks: 8
+  rrf_k: 60
