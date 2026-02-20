@@ -63,3 +63,10 @@ class SearchResponse(BaseModel):
 
     query: str
     results: list[CandidateResult]
+
+
+class CandidateResumeResponse(BaseModel):
+    """Response for GET /api/v1/candidates/{name}/resume."""
+
+    name: str
+    content: str

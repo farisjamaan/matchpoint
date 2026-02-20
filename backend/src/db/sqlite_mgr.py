@@ -41,6 +41,13 @@ _SELECT_ALL_CANDIDATES = """
     FROM candidates
 """
 
+_SELECT_CANDIDATE_BY_NAME = """
+    SELECT id, filename, name, role, email, phone, content
+    FROM candidates
+    WHERE name = ?
+    LIMIT 1
+"""
+
 
 class SQLiteManager:
     """Lightweight wrapper around sqlite3 with context-managed connections."""
@@ -100,3 +107,9 @@ class SQLiteManager:
         candidates = [dict(row) for row in rows]
         logger.info("Fetched %d candidates from SQLite.", len(candidates))
         return candidates
+
+    def get_candidate_by_name(self, name: str) -> dict | None:
+        """Return a single candidate row by name, or None if not found."""
+        with self._connection() as conn:
+            row = conn.execute(_SELECT_CANDIDATE_BY_NAME, (name,)).fetchone()
+        return dict(row) if row else None

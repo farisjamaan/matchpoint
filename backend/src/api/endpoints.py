@@ -14,7 +14,7 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException, Request, status
 
 from src.core.logger import get_logger
-from src.models.schemas import IngestResponse, SearchRequest, SearchResponse
+from src.models.schemas import CandidateResumeResponse, IngestResponse, SearchRequest, SearchResponse
 from src.services import evaluator, ingestion, search
 
 logger = get_logger(__name__)
@@ -150,3 +150,26 @@ async def search_candidates(
         result.phone = contact.get("phone")
 
     return SearchResponse(query=payload.query, results=results)
+
+
+# ---------------------------------------------------------------------------
+# GET /candidates/{name}/resume
+# ---------------------------------------------------------------------------
+
+
+@router.get(
+    "/candidates/{name}/resume",
+    response_model=CandidateResumeResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get candidate resume content",
+    description="Returns the full CV text for a candidate so the client can generate a highlighted resume download.",
+)
+async def get_candidate_resume(name: str, request: Request) -> CandidateResumeResponse:
+    state = request.app.state
+    candidate = state.db_manager.get_candidate_by_name(name)
+    if not candidate:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Candidate '{name}' not found.",
+        )
+    return CandidateResumeResponse(name=candidate["name"], content=candidate["content"])

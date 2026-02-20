@@ -6,9 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Mail, Phone, User } from "lucide-react";
+import { Download, Mail, Phone, User } from "lucide-react";
 import { useState } from "react";
-import { CandidateResult } from "@/lib/api";
+import { CandidateResult, getCandidateResume } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 export type { CandidateResult as Candidate };
@@ -24,10 +24,92 @@ function scoreColor(score: number) {
   return "bg-red-100 text-red-800 border-red-300";
 }
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildHighlightedHTML(
+  name: string,
+  role: string | null | undefined,
+  content: string,
+  evidence: string[]
+): string {
+  let body = escapeHtml(content);
+
+  for (const phrase of evidence) {
+    const trimmed = phrase.trim();
+    if (!trimmed) continue;
+    const pattern = new RegExp(escapeRegex(escapeHtml(trimmed)), "gi");
+    body = body.replace(
+      pattern,
+      (m) => `<mark>${m}</mark>`
+    );
+  }
+
+  body = body.replace(/\n/g, "<br>\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(name)} – Resume</title>
+  <style>
+    body { font-family: Georgia, serif; max-width: 820px; margin: 48px auto; padding: 0 24px; line-height: 1.7; color: #1a1a1a; }
+    h1 { font-size: 1.75rem; color: #111; margin-bottom: 4px; }
+    .role { color: #6b7280; font-size: 1rem; margin-top: 0; margin-bottom: 24px; }
+    .legend { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px 16px; margin-bottom: 28px; font-size: 0.85rem; color: #374151; }
+    mark { background: #fef08a; padding: 1px 0; border-radius: 2px; }
+    .content { font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>${escapeHtml(name)}</h1>
+  ${role ? `<p class="role">${escapeHtml(role)}</p>` : ""}
+  <div class="legend">
+    <mark>Highlighted</mark> sections are evidence excerpts matching the search query.
+  </div>
+  <div class="content">${body}</div>
+</body>
+</html>`;
+}
+
 export function CandidateCard({ candidate, index }: CandidateCardProps) {
   const [open, setOpen] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const { toast } = useToast();
   const hasContact = candidate.email || candidate.phone;
+
+  const downloadResume = async () => {
+    setDownloading(true);
+    try {
+      const { content } = await getCandidateResume(candidate.name);
+      const html = buildHighlightedHTML(
+        candidate.name,
+        candidate.role,
+        content,
+        candidate.evidence
+      );
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${candidate.name.replace(/\s+/g, "_")}_resume.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast({ description: "Failed to download resume.", variant: "destructive" });
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <>
@@ -138,6 +220,17 @@ export function CandidateCard({ candidate, index }: CandidateCardProps) {
                 No contact information available.
               </p>
             )}
+
+            <div className="border-t pt-3">
+              <button
+                onClick={downloadResume}
+                disabled={downloading}
+                className="flex items-center gap-3 rounded-md p-2 text-sm hover:bg-muted transition-colors w-full text-left font-medium text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="h-4 w-4 shrink-0" />
+                <span>{downloading ? "Downloading…" : "Download Resume"}</span>
+              </button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
