@@ -141,4 +141,12 @@ async def search_candidates(
             detail="Candidate evaluation failed. Check server logs for details.",
         )
 
+    # Enrich results with contact info from the database
+    all_candidates = state.db_manager.get_all_candidates()
+    contact_lookup = {c["name"]: {"email": c.get("email"), "phone": c.get("phone")} for c in all_candidates}
+    for result in results:
+        contact = contact_lookup.get(result.name, {})
+        result.email = contact.get("email")
+        result.phone = contact.get("phone")
+
     return SearchResponse(query=payload.query, results=results)

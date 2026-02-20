@@ -47,6 +47,8 @@ class CandidateResult(BaseModel):
         default_factory=list,
         description="Verbatim quotes from the CV that justify the score.",
     )
+    email: str | None = Field(None, description="Candidate's email address.")
+    phone: str | None = Field(None, description="Candidate's phone number.")
 
 
 class IngestResponse(BaseModel):

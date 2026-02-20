@@ -6,6 +6,8 @@ export interface CandidateResult {
   score: number;
   rationale: string;
   evidence: string[];
+  email?: string | null;
+  phone?: string | null;
 }
 
 export interface SearchResponse {
