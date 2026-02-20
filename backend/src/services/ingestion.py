@@ -2,7 +2,7 @@
 services/ingestion.py
 
 Handles the two-phase data ingestion pipeline:
-  1. parse_pptx_with_traceability  — extract tagged text from a .pptx file
+  1. parse_pptx  — extract plain text from a .pptx file
   2. extract_metadata_with_llm     — call Groq to pull structured profile data
   3. ingest_all_pptx               — orchestrate both phases across the data dir
 
@@ -30,12 +30,9 @@ logger = get_logger(__name__)
 # ---------------------------------------------------------------------------
 
 
-def parse_pptx_with_traceability(filepath: Path) -> str:
+def parse_pptx(filepath: Path) -> str:
     """
-    Extract all text from a .pptx file, wrapping every non-empty line with
-    a positional tag for downstream traceability:
-
-        <s{slide}_p{shape}>{line text}</s{slide}_p{shape}>
+    Extract all text from a .pptx file as plain text.
 
     Each shape's lines are grouped into a block; blocks are separated by
     double newlines so downstream chunking (split on "\\n\\n") produces
@@ -45,16 +42,11 @@ def parse_pptx_with_traceability(filepath: Path) -> str:
     prs = Presentation(str(filepath))
     shape_blocks: list[str] = []
 
-    for slide_num, slide in enumerate(prs.slides, start=1):
-        for shape_num, shape in enumerate(slide.shapes, start=1):
+    for slide in prs.slides:
+        for shape in slide.shapes:
             if not hasattr(shape, "text"):
                 continue
-            lines: list[str] = []
-            for line in shape.text.strip().split("\n"):
-                stripped = line.strip()
-                if stripped:
-                    tag = f"s{slide_num}_p{shape_num}"
-                    lines.append(f"<{tag}>{stripped}</{tag}>")
+            lines = [line.strip() for line in shape.text.strip().split("\n") if line.strip()]
             if lines:
                 shape_blocks.append("\n".join(lines))
 
@@ -74,7 +66,7 @@ def extract_metadata_with_llm(
 ) -> dict[str, str | None]:
     """
     Ask the LLM to extract {name, role, email, phone} from the first 2 000
-    characters of the tagged CV content.
+    characters of the CV content.
 
     Returns a dict with those four keys; falls back to safe defaults on any
     Groq or JSON parsing error without crashing the ingestion pipeline.
@@ -149,7 +141,7 @@ def ingest_all_pptx(
         logger.info("Processing: %s", filename)
 
         try:
-            content = parse_pptx_with_traceability(filepath)
+            content = parse_pptx(filepath)
         except PackageNotFoundError:
             logger.error("Skipping %s — not a valid .pptx file.", filename)
             continue

@@ -95,10 +95,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* EY-Style Header Section */}
-      <header className="bg-black">
+      <header className="bg-[hsl(0,0%,4%)]">
         {/* Yellow accent bar */}
         <div className="h-2 bg-primary" />
-        <div className="container mx-auto px-6 py-10">
+        <div className="container mx-auto px-6 py-6">
           <div className="flex items-center gap-4 mb-3">
             {/* EY-style logo mark */}
             <div className="flex items-center gap-2">
@@ -111,13 +111,13 @@ const Index = () => {
                 EY
               </span>
             </div>
-            <div className="h-10 w-px bg-white/20" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            <div className="h-8 w-px bg-white/20" />
+            <h1 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
               Match Point
             </h1>
           </div>
           <p className="text-white/60 max-w-xl text-sm">
-            Evidence-driven internal talent matching system.
+            Evidence Based Matching System.
           </p>
         </div>
       </header>
