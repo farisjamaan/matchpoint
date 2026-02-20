@@ -40,6 +40,7 @@ class CandidateResult(BaseModel):
     """A single evaluated candidate returned by the ranking pipeline."""
 
     name: str = Field(..., description="Candidate's full name extracted from the CV.")
+    role: str | None = Field(None, description="Candidate's job title extracted from the CV.")
     score: int = Field(..., ge=0, le=100, description="Fit score 0–100.")
     rationale: str = Field(..., description="LLM-generated explanation of the score.")
     evidence: list[str] = Field(

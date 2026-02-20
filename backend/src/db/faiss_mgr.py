@@ -77,7 +77,7 @@ class FAISSManager:
                 # Prepend candidate context so every chunk is self-contained
                 enriched = f"Candidate: {name} | Role: {role}\n{chunk_text}"
 
-                chunk_store[chunk_id] = {"name": name, "text": enriched}
+                chunk_store[chunk_id] = {"name": name, "role": role, "text": enriched, "raw_text": chunk_text}
                 bm25_corpus.append(enriched.lower().split())
                 vector_texts.append(enriched)
                 chunk_idx += 1

@@ -100,7 +100,8 @@ def hybrid_search(
             results.append(
                 {
                     "name": chunk_store[chunk_id]["name"],
-                    "text": chunk_store[chunk_id]["text"],
+                    "role": chunk_store[chunk_id].get("role", ""),
+                    "text": chunk_store[chunk_id].get("raw_text", chunk_store[chunk_id]["text"]),
                 }
             )
 

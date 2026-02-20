@@ -32,9 +32,16 @@ export function CandidateCard({ candidate, index }: CandidateCardProps) {
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-3">
-              <h3 className="font-semibold text-foreground truncate">
-                {candidate.name}
-              </h3>
+              <div className="min-w-0">
+                <h3 className="font-semibold text-foreground truncate">
+                  {candidate.name}
+                </h3>
+                {candidate.role && (
+                  <p className="text-xs text-muted-foreground truncate">
+                    {candidate.role}
+                  </p>
+                )}
+              </div>
               <Badge
                 variant="outline"
                 className={`shrink-0 font-bold ${scoreColor(candidate.score)}`}

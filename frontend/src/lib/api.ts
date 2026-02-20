@@ -2,6 +2,7 @@ const API_BASE = "/api/v1";
 
 export interface CandidateResult {
   name: string;
+  role?: string | null;
   score: number;
   rationale: string;
   evidence: string[];

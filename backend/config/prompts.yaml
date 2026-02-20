@@ -14,8 +14,7 @@ evaluation_prompt: |
   Instructions:
   1. Score the candidate from 0 to 100 based on their fit for the project.
   2. Write a brief rationale.
-  3. Extract 2-4 EXACT quotes from the Candidate Data that prove they are a match.
-  4. EVERY evidence quote MUST include its original tag. If you cannot find a tag, DO NOT include the quote.
+  3. Extract 2-4 EXACT verbatim quotes from the Candidate Data that prove they are a match. Do NOT add, modify, or append anything to the quotes.
   
   Return ONLY a valid JSON object with the following keys:
   "score" (integer), "rationale" (string), "evidence" (list of strings).

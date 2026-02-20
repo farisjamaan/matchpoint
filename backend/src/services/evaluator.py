@@ -53,10 +53,13 @@ def evaluate_candidates(
     # 1. Group chunks by candidate name
     # ------------------------------------------------------------------
     candidates_content: dict[str, str] = {}
+    candidates_role: dict[str, str] = {}
     for chunk in top_chunks:
         name = chunk["name"]
         candidates_content.setdefault(name, "")
         candidates_content[name] += chunk["text"] + "\n\n"
+        if name not in candidates_role:
+            candidates_role[name] = chunk.get("role", "") or ""
 
     logger.info(
         "Evaluating %d unique candidate(s) against query: '%.80s'",
@@ -90,6 +93,7 @@ def evaluate_candidates(
             results.append(
                 CandidateResult(
                     name=name,
+                    role=candidates_role.get(name) or None,
                     score=int(raw.get("score", 0)),
                     rationale=raw.get("rationale", ""),
                     evidence=raw.get("evidence", []),

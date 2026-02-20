@@ -7,7 +7,7 @@ system:
 
 llm:
   extraction_model: "llama-3.1-8b-instant"  # Fast model for JSON extraction
-  reasoning_model: "llama-3.3-70b-versatile"  # Smart model for matching (used later)
+  reasoning_model: "moonshotai/kimi-k2-instruct-0905"  # Smart model for matching (used later)
   temperature: 0.0                    # Keep 0 for consistent data extraction
   max_tokens: 1000
 
