@@ -31,18 +31,19 @@ router = APIRouter()
     "/ingest",
     response_model=IngestResponse,
     status_code=status.HTTP_200_OK,
-    summary="Ingest PPTX CVs",
+    summary="Ingest CVs (PPTX or text)",
     description=(
-        "Scans the configured `data/raw_cv/` directory for `.pptx` files, "
+        "Scans the configured `data/raw_cv/` directory for `.pptx` and `.txt` files, "
         "extracts metadata via the Groq LLM, stores records in SQLite, "
-        "and rebuilds the FAISS + BM25 search indices."
+        "and rebuilds the FAISS + BM25 search indices. "
+        "Text files must use the slide-marker format (=====\\nSlide N\\n=====)."
     ),
 )
 async def ingest_cvs(request: Request) -> IngestResponse:
     state = request.app.state
 
     try:
-        count = ingestion.ingest_all_pptx(
+        count = ingestion.ingest_all(
             data_dir=state.data_dir,
             db_manager=state.db_manager,
             groq_client=state.groq_client,
@@ -110,6 +111,7 @@ async def search_candidates(
             faiss_manager=state.faiss_manager,
             top_k=state.config.retrieval.top_k_chunks,
             rrf_k=state.config.retrieval.rrf_k,
+            target_roles=payload.target_roles or [],
         )
     except RuntimeError as exc:
         raise HTTPException(
@@ -122,6 +124,11 @@ async def search_candidates(
             detail="Search failed. Check server logs for details.",
         )
 
+    # target_roles is used two ways:
+    #   1. Hard pre-filter inside hybrid_search (above) — candidates outside
+    #      the selected levels never reach the LLM, saving tokens and latency.
+    #   2. Soft signal passed to the LLM prompt so it can consider seniority fit.
+
     try:
         results = evaluator.evaluate_candidates(
             top_chunks=top_chunks,
@@ -133,6 +140,7 @@ async def search_candidates(
             max_tokens=state.config.llm.max_tokens,
             prompt_template=state.prompts["evaluation_prompt"],
             taxonomy_context=state.taxonomy_context,
+            target_roles=payload.target_roles,
         )
     except Exception as exc:
         logger.error("LLM evaluation failed: %s", exc)
@@ -140,6 +148,9 @@ async def search_candidates(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Candidate evaluation failed. Check server logs for details.",
         )
+
+    # Drop candidates with no meaningful match (score below 15)
+    results = [r for r in results if r.score >= 15]
 
     # Enrich results with contact info from the database
     all_candidates = state.db_manager.get_all_candidates()

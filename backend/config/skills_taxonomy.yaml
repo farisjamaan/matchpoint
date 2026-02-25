@@ -1,20 +1,268 @@
 categories:
+
   Artificial_Intelligence:
     Machine_Learning:
-      aliases: ["ML", "Predictive Modeling", "XGBoost", "Scikit-learn", "LightGBM"]
+      aliases: ["ML", "Predictive Modeling", "XGBoost", "Scikit-learn", "LightGBM",
+                "Deep Learning", "Supervised Learning", "Unsupervised Learning",
+                "Time-Series Forecasting", "Anomaly Detection", "Production Forecasting",
+                "Reservoir Analytics", "Multivariate Forecasting", "ML Workflows"]
     Natural_Language_Processing:
-      aliases: ["NLP", "Transformers", "BERT", "LLM", "Text Mining"]
+      aliases: ["NLP", "Transformers", "BERT", "LLM", "Text Mining",
+                "Cognitive Services", "Sentiment Analysis", "Text Analytics"]
+    Generative_AI:
+      aliases: ["GenAI", "Generative AI", "Agentic AI", "AI Agents", "RAG",
+                "MCP", "Foundation Models", "LLMOps", "Document Intelligence",
+                "Knowledge Assistants", "Conversational AI", "AI Copilot",
+                "Prompt Engineering", "AI Digital Factory"]
+    Computer_Vision:
+      aliases: ["Computer Vision", "Image Recognition", "Video Analytics",
+                "Object Detection", "Visual AI"]
     AI_Governance:
-      aliases: ["AI Ethics", "Risk Management", "Responsible AI"]
+      aliases: ["AI Ethics", "Responsible AI", "Ethical AI", "AI Compliance",
+                "AI Risk Management", "AI Literacy", "AI Readiness Assessment",
+                "AI Governance Framework", "Data Ethics Principles"]
     AI_Strategy:
-      aliases: ["AI Roadmap", "Enterprise Transformation", "Center of Excellence", "CoE"]
-  
-  Data_Engineering:
-    Modern_Data_Stack:
-      aliases: ["Snowflake", "dbt", "Fivetran", "Data Warehouse"]
-    Data_Governance:
-      aliases: ["DAMA-DMBOK", "Data Stewardship", "Master Data Management", "MDM"]
+      aliases: ["AI Roadmap", "AI Strategy", "Enterprise AI Transformation",
+                "AI Center of Excellence", "AI CoE", "AI Use Case Ideation",
+                "AI Use Case Portfolio", "AI Use Case Playbook", "AI Operating Model",
+                "AI Readiness", "Center of Excellence", "CoE",
+                "Insight Strategy", "Analytics Roadmap"]
+    MLOps:
+      aliases: ["MLOps", "LLMOps", "AIOps", "CI/CD for ML", "Model Monitoring",
+                "Model Deployment", "ML Lifecycle", "Drift Detection",
+                "Model Retraining", "Feature Engineering", "Model Validation",
+                "ML Pipeline", "Dataiku"]
+    Advanced_Analytics:
+      aliases: ["Advanced Analytics", "Data Science", "Predictive Analytics",
+                "Optimization Modeling", "Statistical Modeling", "Forecasting",
+                "Econometric Modeling", "Customer Analytics", "Decision Science",
+                "Operations Research", "Prescriptive Analytics"]
 
-  Delivery_Management:
+  Data_Strategy:
+    Data_and_AI_Strategy:
+      aliases: ["Data Strategy", "Data & AI Strategy", "Analytics Strategy",
+                "Insight Strategy", "Data Value Realization", "Data Monetization",
+                "Data Marketplace", "Open Data Strategy", "Data Maturity Assessment",
+                "Data Maturity Index", "Data Capability Model", "Data Literacy",
+                "Enterprise Data Strategy", "National Data Strategy"]
+    Operating_Model_Design:
+      aliases: ["Target Operating Model", "TOM", "Data Management Office", "DMO",
+                "Data Office Setup", "Data Operating Model", "Data Organization Design",
+                "CDO Office", "Digital Transformation Office", "DTO",
+                "IT Operating Model", "Governance Operating Model",
+                "Federated Operating Model", "Operating Model Activation"]
+
+  Data_Architecture:
+    Cloud_Data_Platform:
+      aliases: ["Cloud Data Platform", "Data Lakehouse", "Data Lake", "Data Warehouse",
+                "EDW", "Enterprise Data Warehouse", "Medallion Architecture",
+                "Data Mesh", "Data Fabric", "Modern Data Architecture",
+                "Hybrid Cloud Architecture", "Cloud Migration", "On-Prem to Cloud",
+                "Data Hub", "Central Data Platform", "Analytics Platform",
+                "Transport Data Analytics Platform", "DAP"]
+    Big_Data:
+      aliases: ["Big Data", "Hadoop", "Spark", "Cloudera", "Kafka",
+                "Data Streaming", "Real-time Analytics", "Industrial IoT",
+                "Telematics Architecture", "Data Ingestion", "GreenPlum"]
+    Data_Modeling:
+      aliases: ["Data Modeling", "Dimensional Modeling", "Conceptual Modeling",
+                "Logical Modeling", "Physical Modeling", "Data Model Design",
+                "Semantic Layer", "Data Products", "Data Marts",
+                "Conceptual and Logical Data Models", "Master Data Model",
+                "Reference Datasets"]
+    Solution_Architecture:
+      aliases: ["Solution Architecture", "Enterprise Architecture", "TOGAF",
+                "Architecture Design", "Integration Architecture",
+                "Reference Architecture", "Technical Architecture",
+                "L1 L2 L3 Architecture", "Architecture Assessment",
+                "Technology Evaluation", "Architecture Review Board"]
+
+  Data_Engineering:
+    ETL_and_Integration:
+      aliases: ["ETL", "ELT", "Data Pipeline", "Data Integration",
+                "DataStage", "Informatica PowerCenter", "SSIS",
+                "Informatica IICS", "Fivetran", "Azure Data Factory",
+                "Data Migration", "Shell Scripting", "SQL Scripting",
+                "Data Extraction", "Data Loading", "Enterprise Integration",
+                "Interface Design", "Data Exchange", "Data Standardization"]
+    Modern_Data_Stack:
+      aliases: ["Snowflake", "dbt", "Databricks", "Azure Synapse",
+                "GCP BigQuery", "AWS Redshift", "Microsoft Fabric",
+                "Snowflake SnowPro", "Databricks Data Analyst"]
+    Informatica_Suite:
+      aliases: ["Informatica MDM", "Informatica EDC", "Informatica Axon",
+                "Informatica IDQ", "Informatica Customer 360", "Informatica IICS",
+                "Informatica PowerCenter", "Informatica PowerExchange",
+                "Protegrity", "Data Catalog", "Metadata Management", "Data Lineage"]
+    DataOps:
+      aliases: ["DataOps", "Data DevOps", "Data Pipeline Automation",
+                "CI/CD", "Infrastructure as Code", "Data Orchestration"]
+    Programming:
+      aliases: ["Python", "SQL", "R", "PL/SQL", "JavaScript", "C#",
+                "Spark SQL", "NumPy", "Pandas", "Unix Shell Scripting",
+                "VBA", "Data Scripting"]
+
+  Data_Management_and_Governance:
+    Data_Governance:
+      aliases: ["Data Governance", "DAMA-DMBOK", "Data Stewardship",
+                "Data Governance Framework", "NDMO", "NDMO Compliance",
+                "Data Governance Policy", "Data Governance Processes",
+                "BCBS", "Data Governance Tools", "Data Catalog",
+                "Data Lineage", "Metadata Management", "Data Taxonomies",
+                "Information Lifecycle Management", "Data Dictionary",
+                "Enterprise Data Governance", "Regulatory Compliance",
+                "Abu Dhabi Data Management Standards", "EDMC",
+                "Data Governance Champion", "Data Steward"]
+    Master_Data_Management:
+      aliases: ["MDM", "Master Data Management", "Reference Data Management",
+                "RDM", "Informatica MDM", "Customer 360", "MDM Architecture",
+                "Master Data", "Reference Data", "Master Data Candidates",
+                "Unified National Code"]
+    Data_Quality:
+      aliases: ["Data Quality", "Data Profiling", "Data Quality Rules",
+                "Data Quality Framework", "Informatica IDQ", "Informatica Axon",
+                "Data Quality Assessment", "Data Reconciliation",
+                "Data Integrity", "Data Accuracy", "Data Completeness",
+                "National Data Quality Framework", "Data Quality Deep Dive"]
+    Data_Privacy_and_Compliance:
+      aliases: ["Data Privacy", "PDPL", "KSA PDPL", "Saudi PDPL",
+                "GDPR", "EU GDPR", "ISO 27001", "ISO 27002", "ISO 27701",
+                "ISO 27005", "Data Protection", "Privacy by Design",
+                "DPIA", "RoPA", "Consent Management", "Data Classification",
+                "Data Ethics", "Data Sharing Agreements", "DSAR",
+                "Breach Management", "Third-Party Privacy Assessment",
+                "Data Protection Officer", "DPO", "Data Ethics Principles",
+                "Data Retention", "De-identification"]
+    Data_Security:
+      aliases: ["Data Security", "Cybersecurity GRC", "Access Management",
+                "Data Encryption", "Data Masking", "Protegrity",
+                "Risk Heat Map", "Cyber Risk Management", "NDMO Data Security",
+                "Enterprise Risk Management"]
+
+  Business_Intelligence_and_Visualization:
+    BI_Tools:
+      aliases: ["Power BI", "Tableau", "QlikSense", "QlikView", "OBIEE",
+                "MicroStrategy", "SAP Business Objects", "Oracle Analytics",
+                "Alteryx", "D3.js", "ArcGIS", "Business Intelligence",
+                "Oracle Utilities Analytics", "Microsoft Power BI Data Analyst",
+                "Certified Azure AI Engineer"]
+    Dashboard_and_Reporting:
+      aliases: ["KPI Development", "Dashboard Design", "Executive Dashboard",
+                "C-Suite Dashboard", "MIS Reporting", "Enterprise Reporting",
+                "Performance Management", "Balance Scorecard", "BSC",
+                "XBRL", "Regulatory Reporting", "Financial Reporting",
+                "KPI Definitions", "KRI", "Performance Tracking",
+                "Decision Support", "Strategic KPIs"]
+    Self_Service_BI:
+      aliases: ["Self-Service Analytics", "Data Democratization",
+                "Self-Service BI", "Citizen Data Analyst", "BI Adoption",
+                "Business-Led Analytics"]
+
+  Cloud_and_Technology:
+    Cloud_Platforms:
+      aliases: ["AWS", "Azure", "Google Cloud", "GCP", "Microsoft Azure",
+                "Azure ML Studio", "Oracle Cloud Infrastructure",
+                "G42 Cloud", "Huawei Cloud", "Cloud Analytics",
+                "Cloud Adoption", "SAAS", "PAAS", "Cloud Strategy",
+                "Multi-Cloud", "Azure Synapse Analytics"]
+    DevOps_and_Automation:
+      aliases: ["DevOps", "DevSecOps", "CI/CD", "RPA", "Workflow Automation",
+                "Digital Workflow", "Intelligent Automation", "AIOps",
+                "Infrastructure as Code", "Agile DevOps"]
+    ERP_and_Enterprise_Systems:
+      aliases: ["SAP", "Oracle EBS", "Oracle E-Business Suite",
+                "ServiceNow", "Siebel", "ERP Implementation",
+                "Supply Chain Management", "Business Process Reengineering",
+                "SAP Transformation", "Oracle BI"]
+    Digital_Transformation:
+      aliases: ["Digital Transformation", "IT Strategy", "Digital Strategy",
+                "Technology Strategy", "Digital Maturity Assessment",
+                "Digital Capabilities", "Customer Experience Transformation",
+                "Front-Office Transformation", "Smart City",
+                "Digital Center", "Digital ID", "National Transformation",
+                "e-Invoicing", "Digital Reinvention", "Platform Modernization"]
+    Databases_and_RDBMS:
+      aliases: ["Oracle", "SQL Server", "MSSQLServer", "Teradata",
+                "GreenPlum", "RDBMS", "Database Architecture",
+                "Database Profiling", "Database Reconciliation"]
+
+  Delivery_and_Program_Management:
     Agile:
-      aliases: ["Scrum", "Kanban", "SAFe", "Agile Delivery"]
+      aliases: ["Agile", "Scrum", "Kanban", "SAFe", "Agile Delivery",
+                "Sprint Management", "Product Backlog", "Agile Methodology",
+                "PMI-ACP", "Scrum Master", "Certified Scrum Master",
+                "Design Thinking", "Professional Scrum Master"]
+    Project_Management:
+      aliases: ["Project Management", "PMP", "Program Management", "PMO",
+                "TMO", "Transformation Management Office", "Delivery Management",
+                "ITIL", "Risk and Issue Management", "Cost Management",
+                "Scope Management", "Program Delivery", "Lean Six Sigma",
+                "Benefit Realization", "Value Realization"]
+    Product_Management:
+      aliases: ["Product Management", "Product Strategy", "Product Lifecycle Management",
+                "Product Ownership", "User Stories", "Requirements Management",
+                "UAT", "User Acceptance Testing", "Product Roadmap",
+                "Business Case Development", "Epics", "Backlog Management"]
+    Change_Management:
+      aliases: ["Change Management", "Organizational Change", "Training and Awareness",
+                "Adoption", "Stakeholder Engagement", "Communication Planning",
+                "Workshops", "Change Management Plan", "User Adoption"]
+    Stakeholder_Management:
+      aliases: ["Stakeholder Management", "C-Suite Advisory", "Executive Engagement",
+                "Client Engagement", "Senior Stakeholder", "CDO", "CIO",
+                "Cross-functional Coordination", "Vendor Collaboration"]
+
+  Industry_Expertise:
+    Financial_Services:
+      aliases: ["Banking", "Financial Services", "Insurance", "Capital Markets",
+                "Investment Management", "Wealth Management", "Retail Banking",
+                "Corporate Banking", "Islamic Banking", "AML",
+                "Anti-Money Laundering", "Credit Risk", "Fraud Detection",
+                "XBRL", "Regulatory Reporting", "BCBS", "Sanctions",
+                "KYC", "Revenue Assurance", "Stress Testing",
+                "Sovereign Wealth Fund", "Central Bank", "Investment Fund"]
+    Government_and_Public_Sector:
+      aliases: ["Government", "Public Sector", "Ministry", "Regulatory Authority",
+                "National Transformation", "Government Consulting", "GPS",
+                "Defense", "NDMO", "Smart Cities", "Urban Development",
+                "Public Investment Fund", "PIF", "Municipalities",
+                "Space Research", "National Security", "Umrah",
+                "Immigration Systems", "e-Government"]
+    Oil_and_Gas_and_Energy:
+      aliases: ["Oil & Gas", "Energy", "Upstream Analytics",
+                "Reservoir Analytics", "Production Forecasting",
+                "Well Integrity", "Subsurface Data", "Petroleum Engineering",
+                "Petrochemicals", "Utilities", "Power & Utilities",
+                "Mining", "Natural Resources", "Water Management",
+                "Environmental Sector"]
+    Telecommunications:
+      aliases: ["Telecom", "Telecommunications", "Network Analytics",
+                "Revenue Assurance", "Customer Analytics", "B2B BI",
+                "TMT", "Mobile Analytics", "Customer Churn", "Marketing Analytics"]
+    Healthcare:
+      aliases: ["Healthcare", "Health Sector", "Clinical Analytics",
+                "Patient Analytics", "HL7", "FHIR", "Healthcare Data",
+                "Hospital Analytics", "Healthcare Resource Optimization"]
+    Manufacturing_and_Supply_Chain:
+      aliases: ["Manufacturing", "Supply Chain", "Procurement", "Logistics",
+                "Warehouse Management", "Asset Management", "O2C", "P2P",
+                "Process Manufacturing", "Distribution", "Strategic Sourcing",
+                "Budgeting", "Planning"]
+
+  Leadership_and_Soft_Skills:
+    Leadership:
+      aliases: ["Team Leadership", "People Management", "Talent Development",
+                "High-Performing Teams", "Cross-Functional Leadership",
+                "CoE Leadership", "Servant Leadership", "Team Building",
+                "Mentoring", "Coaching"]
+    Strategic_Consulting:
+      aliases: ["Strategy Consulting", "Management Consulting",
+                "Feasibility Study", "Market Intelligence", "Growth Strategy",
+                "Business Development", "Value Proposition", "Deal Structuring",
+                "Pre-Sales", "Sales Leadership", "Opportunity Management"]
+    Practice_Building:
+      aliases: ["Practice Building", "Vendor Management", "Alliance Management",
+                "Partnership Development", "Capability Building",
+                "Center of Excellence Setup", "CoE Activation",
+                "Data Science CoE", "AI CoE", "Thought Leadership",
+                "Knowledge Management"]

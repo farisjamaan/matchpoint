@@ -9,9 +9,9 @@ llm:
   extraction_model: "llama-3.1-8b-instant"  # Fast model for JSON extraction
   reasoning_model: "moonshotai/kimi-k2-instruct-0905"  # Smart model for matching (used later)
   temperature: 0.0                    # Keep 0 for consistent data extraction
-  max_tokens: 1000
+  max_tokens: 2000
 
 
 retrieval:
-  top_k_chunks: 8
+  top_k_chunks: 40   # Covers all ~30 candidates; was 8 (most candidates were never seen)
   rrf_k: 60

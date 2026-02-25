@@ -27,6 +27,7 @@ def hybrid_search(
     faiss_manager: FAISSManager,
     top_k: int,
     rrf_k: int,
+    target_roles: list[str] | None = None,
 ) -> list[dict[str, str]]:
     """
     Run a config-driven RRF Hybrid Search and return the top_k most relevant
@@ -38,6 +39,9 @@ def hybrid_search(
         faiss_manager: Loaded FAISSManager (must have is_ready == True).
         top_k:         Number of chunks to return.
         rrf_k:         RRF damping constant (typically 60).
+        target_roles:  Optional list of role levels to hard-filter on (e.g. ["Consultant II"]).
+                       Filtering is applied after RRF fusion but before passing chunks to the LLM,
+                       so excluded candidates never cost LLM tokens. Empty list = no filter.
 
     Raises:
         RuntimeError: If the indices have not been built yet.
@@ -52,8 +56,9 @@ def hybrid_search(
     bm25_id_map = faiss_manager.bm25_id_map
     index = faiss_manager.faiss_index
 
-    # Cap candidate pool to available chunks
-    search_k = min(50, len(chunk_store))
+    # Candidate pool: retrieve enough chunks so RRF has a wide base to fuse from.
+    # Scale with top_k so that as top_k grows the pool stays proportionally large.
+    search_k = min(len(chunk_store), max(top_k * 3, 120))
 
     # ------------------------------------------------------------------
     # 1. Dense vector search (FAISS)
@@ -94,17 +99,61 @@ def hybrid_search(
     # ------------------------------------------------------------------
     # 4. Materialise results
     # ------------------------------------------------------------------
-    results: list[dict[str, str]] = []
-    for chunk_id, score in fused[:top_k]:
-        if chunk_id in chunk_store:
-            results.append(
-                {
-                    "name": chunk_store[chunk_id]["name"],
-                    "role": chunk_store[chunk_id].get("role", ""),
-                    "text": chunk_store[chunk_id].get("raw_text", chunk_store[chunk_id]["text"]),
-                }
-            )
+    # Build a normalised set of allowed roles for fast lookup.
+    # Matching is case-insensitive substring so "Consultant II" matches
+    # a stored role of "EY Consultant II" or "consultant ii".
+    normalised_targets = (
+        [r.lower() for r in target_roles] if target_roles else []
+    )
 
+    def _role_allowed(chunk_role: str) -> bool:
+        if not normalised_targets:
+            return True
+        chunk_role_lower = (chunk_role or "").lower()
+        return any(t in chunk_role_lower for t in normalised_targets)
+
+    # Track which candidate names have already been admitted so we apply the
+    # role filter at candidate granularity (not chunk granularity), avoiding
+    # the false-negative problem where some chunks lack role metadata.
+    admitted_names: set[str] = set()
+    rejected_names: set[str] = set()
+
+    results: list[dict[str, str]] = []
+    for chunk_id, score in fused:
+        if chunk_id not in chunk_store:
+            continue
+        chunk = chunk_store[chunk_id]
+        name = chunk["name"]
+
+        # Once we know a candidate is rejected, skip all their chunks.
+        if name in rejected_names:
+            continue
+
+        # First time we see this candidate: decide admission based on role.
+        if name not in admitted_names:
+            if _role_allowed(chunk.get("role", "")):
+                admitted_names.add(name)
+            else:
+                rejected_names.add(name)
+                continue
+
+        results.append(
+            {
+                "name": name,
+                "role": chunk.get("role", ""),
+                "text": chunk.get("raw_text", chunk["text"]),
+            }
+        )
+        if len(results) >= top_k:
+            break
+
+    if normalised_targets:
+        logger.info(
+            "Role filter active %s — admitted %d candidate(s), rejected %d",
+            target_roles,
+            len(admitted_names),
+            len(rejected_names),
+        )
     logger.info(
         "Hybrid search returned %d chunks for query: '%.80s'", len(results), query
     )

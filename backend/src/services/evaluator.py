@@ -31,6 +31,7 @@ def evaluate_candidates(
     max_tokens: int,
     prompt_template: str,
     taxonomy_context: str,
+    target_roles: list[str] | None = None,
 ) -> list[CandidateResult]:
     """
     Evaluate every candidate represented in top_chunks and return a
@@ -40,6 +41,7 @@ def evaluate_candidates(
         top_chunks:       Output of hybrid_search — list of {"name", "text"}.
         pm_query:         The PM's natural-language project description.
         pm_skills:        Explicit skill keywords to highlight in the prompt.
+        target_roles:     Optional list of desired seniority levels (e.g. ["Consultant II", "Senior Consultant"]).
         groq_client:      Injected Groq API client.
         reasoning_model:  Groq model ID for reasoning (e.g. llama-3.3-70b-versatile).
         temperature:      Sampling temperature (0.0 for deterministic output).
@@ -74,8 +76,9 @@ def evaluate_candidates(
 
     for name, content in candidates_content.items():
         prompt = prompt_template.format(
-            pm_skills=", ".join(pm_skills),
+            pm_skills=", ".join(pm_skills) if pm_skills else "Not specified",
             pm_desc=pm_query,
+            target_role=", ".join(target_roles) if target_roles else "Any",
             taxonomy=taxonomy_context,
             content=content,
         )

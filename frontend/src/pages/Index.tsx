@@ -3,10 +3,21 @@ import { MultiSelect, Option } from "@/components/MultiSelect";
 import { CandidateCard } from "@/components/CandidateCard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Search, X } from "lucide-react";
 import { searchCandidates, CandidateResult } from "@/lib/api";
+
+const roleOptions: Option[] = [
+  { value: "Consultant I", label: "Consultant I" },
+  { value: "Consultant II", label: "Consultant II" },
+  { value: "Senior Consultant", label: "Senior Consultant" },
+  { value: "Assistant Manager", label: "Assistant Manager" },
+  { value: "Manager", label: "Manager" },
+  { value: "Senior Manager", label: "Senior Manager" },
+  { value: "Director", label: "Director" },
+  { value: "Senior Director", label: "Senior Director" },
+  { value: "Partner", label: "Partner" },
+];
 
 const skillOptions: Option[] = [
   { value: "React", label: "React" },
@@ -38,6 +49,7 @@ const skillOptions: Option[] = [
 
 const Index = () => {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [roleDescription, setRoleDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -57,7 +69,6 @@ const Index = () => {
       return;
     }
 
-    // Build query: use roleDescription if long enough, otherwise derive from skills
     const query =
       roleDescription.trim().length >= 10
         ? roleDescription.trim()
@@ -66,7 +77,11 @@ const Index = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await searchCandidates(query, selectedSkills);
+      const response = await searchCandidates(
+        query,
+        selectedSkills,
+        selectedRoles.length > 0 ? selectedRoles : undefined
+      );
       setResults(response.results);
       setShowResults(true);
       toast({
@@ -89,23 +104,21 @@ const Index = () => {
     setShowResults(false);
     setResults([]);
     setSelectedSkills([]);
+    setSelectedRoles([]);
     setRoleDescription("");
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* EY-Style Header Section */}
-      <header className="bg-[hsl(0,0%,4%)]">
-        {/* Yellow accent bar */}
-        <div className="h-2 bg-primary" />
+    <div className="min-h-screen bg-[#0D0D0D] flex flex-col">
+      {/* Header */}
+      <header className="bg-[#0D0D0D] border-t-2 border-t-[#FFE600] border-b border-b-[rgba(255,255,255,0.06)]">
         <div className="container mx-auto px-6 py-6">
           <div className="flex items-center gap-4 mb-3">
-            {/* EY-style logo mark */}
             <div className="flex items-center gap-2">
               <div className="flex flex-col gap-[3px]">
-                <div className="h-[6px] w-8 bg-primary" />
-                <div className="h-[6px] w-6 bg-primary" />
-                <div className="h-[6px] w-4 bg-primary" />
+                <div className="h-[6px] w-8 bg-[#FFE600]" />
+                <div className="h-[6px] w-6 bg-[#FFE600]" />
+                <div className="h-[6px] w-4 bg-[#FFE600]" />
               </div>
               <span className="text-3xl md:text-4xl font-black text-white tracking-tighter">
                 EY
@@ -116,7 +129,7 @@ const Index = () => {
               Match Point
             </h1>
           </div>
-          <p className="text-white/60 max-w-xl text-sm">
+          <p className="text-white/60 max-w-xl text-sm font-mono">
             Evidence Based Matching System.
           </p>
         </div>
@@ -127,61 +140,84 @@ const Index = () => {
         {!showResults ? (
           <form
             onSubmit={handleSubmit}
-            className="max-w-2xl mx-auto space-y-8 animate-fade-in"
+            className="w-full max-w-2xl mx-auto bg-[#141414] border border-[rgba(255,230,0,0.08)] rounded-2xl ey-shadow-panel p-6 animate-fade-in"
           >
-            {/* Skills Selection */}
-            <div className="space-y-3">
-              <Label htmlFor="skills" className="form-label">
-                Select Required Skills
-              </Label>
-              <MultiSelect
-                options={skillOptions}
-                selected={selectedSkills}
-                onChange={setSelectedSkills}
-                placeholder="Search and select skills..."
-              />
-              <p className="text-xs text-muted-foreground">
-                Select one or more skills to find matching candidates.
-              </p>
+            {/* Panel header */}
+            <div className="mb-8">
+              <h2 className="font-mono text-[11px] text-[#FFE600]/60 tracking-widest uppercase">
+                Talent Search
+              </h2>
             </div>
 
-            {/* Role Description */}
-            <div className="space-y-3">
-              <Label htmlFor="role-description" className="form-label">
-                Role Description
-              </Label>
-              <Textarea
-                id="role-description"
-                value={roleDescription}
-                onChange={(e) => setRoleDescription(e.target.value)}
-                placeholder="Describe the project or role requirements, responsibilities, and any additional context..."
-                className="min-h-[160px] resize-y transition-colors hover:border-primary focus:border-primary"
-              />
-              <p className="text-xs text-muted-foreground">
-                Optional: Provide additional context about the role or project.
-              </p>
-            </div>
+            <div className="space-y-6">
+              {/* Required Skills */}
+              <div className="space-y-2">
+                <label className="block font-mono text-[10px] text-[#A3A3A3] uppercase tracking-widest">
+                  Required Skills
+                </label>
+                <MultiSelect
+                  options={skillOptions}
+                  selected={selectedSkills}
+                  onChange={setSelectedSkills}
+                  placeholder="Search and select skills..."
+                />
+                <p className="text-xs text-[#A3A3A3]/60">
+                  Select one or more skills to find matching candidates.
+                </p>
+              </div>
 
-            {/* Submit Button */}
-            <div className="pt-4">
-              <Button
+              {/* Target Level */}
+              <div className="space-y-2">
+                <label className="block font-mono text-[10px] text-[#A3A3A3] uppercase tracking-widest">
+                  Target Level
+                </label>
+                <MultiSelect
+                  options={roleOptions}
+                  selected={selectedRoles}
+                  onChange={setSelectedRoles}
+                  placeholder="Search and select levels..."
+                />
+                <p className="text-xs text-[#A3A3A3]/60">
+                  Optional: Filter candidates by seniority level.
+                </p>
+              </div>
+
+              {/* Mission Brief */}
+              <div className="space-y-2">
+                <label className="block font-mono text-[10px] text-[#A3A3A3] uppercase tracking-widest">
+                  Mission Brief
+                </label>
+                <Textarea
+                  value={roleDescription}
+                  onChange={(e) => setRoleDescription(e.target.value)}
+                  placeholder="Describe the engagement, required competencies, and project context..."
+                  className="min-h-[160px] resize-y transition-colors hover:border-primary focus:border-primary"
+                />
+                <p className="text-xs text-[#A3A3A3]/60">
+                  Optional: Provide additional context about the role or project.
+                </p>
+              </div>
+
+              {/* Submit */}
+              <button
                 type="submit"
-                size="lg"
                 disabled={isSubmitting}
-                className="w-full md:w-auto px-8 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-md transition-all hover:shadow-lg"
+                className="w-full h-[52px] bg-[#FFE600] text-[#0D0D0D] font-semibold text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-[#FFD000] hover:scale-[1.01] ey-shadow-btn-hover transition-all ey-sheen disabled:opacity-80 disabled:hover:scale-100 disabled:cursor-not-allowed relative overflow-hidden"
               >
                 {isSubmitting ? (
-                  <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    Searching...
-                  </span>
+                  <>
+                    <span className="text-sm relative z-10">
+                      Searching...
+                    </span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 animate-shimmer" />
+                  </>
                 ) : (
-                  <span className="flex items-center gap-2">
-                    <Search className="h-4 w-4" />
-                    Find Talent
-                  </span>
+                  <>
+                    <Search className="w-4 h-4" />
+                    <span>Find Talent</span>
+                  </>
                 )}
-              </Button>
+              </button>
             </div>
           </form>
         ) : (
@@ -189,10 +225,10 @@ const Index = () => {
             {/* Results Header */}
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-xl font-bold text-foreground">
+                <h2 className="text-xl font-bold text-white">
                   Matching Candidates
                 </h2>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-[#A3A3A3] mt-1">
                   Found {results.length} candidate
                   {results.length !== 1 ? "s" : ""} matching your criteria
                 </p>
@@ -218,10 +254,9 @@ const Index = () => {
               ))}
             </div>
 
-            {/* Action Hint */}
             {results.length > 0 && (
-              <div className="mt-8 p-4 rounded-lg bg-secondary/50 border border-border">
-                <p className="text-sm text-muted-foreground text-center">
+              <div className="mt-8 p-4 rounded-lg bg-[#141414] border border-[rgba(255,255,255,0.06)]">
+                <p className="text-sm text-[#A3A3A3] text-center">
                   Candidates are ranked by AI fit score. Higher scores indicate
                   a stronger match for your requirements.
                 </p>
@@ -232,10 +267,10 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border mt-auto">
+      <footer className="border-t border-[rgba(255,255,255,0.06)] mt-auto">
         <div className="container mx-auto px-6 py-6">
-          <p className="text-xs text-muted-foreground text-center">
-            Internal use only. For support, contact the People team.
+          <p className="text-xs text-[#A3A3A3] text-center font-mono">
+            Internal use only. For support, contact innovation lab team.
           </p>
         </div>
       </footer>

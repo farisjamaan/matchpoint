@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -102,4 +104,35 @@
   .form-label {
     @apply text-sm font-semibold text-foreground tracking-tight;
   }
+}
+
+/* EY Command Center Utilities */
+.ey-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.ey-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-12deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.ey-sheen:hover::after {
+  left: 200%;
+}
+
+.ey-shadow-panel {
+  box-shadow: 0 0 60px rgba(255, 230, 0, 0.04);
+}
+.ey-shadow-card-hover {
+  box-shadow: 0 0 24px rgba(255, 230, 0, 0.06);
+}
+.ey-shadow-btn-hover {
+  box-shadow: 0 8px 32px rgba(255, 230, 0, 0.25);
 }

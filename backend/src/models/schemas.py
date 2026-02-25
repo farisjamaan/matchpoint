@@ -29,6 +29,11 @@ class SearchRequest(BaseModel):
         description="Explicit skill keywords to weight during evaluation.",
         examples=[["NLP", "Machine Learning", "Healthcare"]],
     )
+    target_roles: list[str] = Field(
+        default_factory=list,
+        description="Desired seniority/role levels for the candidate (e.g. ['Consultant II', 'Senior Consultant']). Empty list means no filter.",
+        examples=[["Consultant II", "Senior Consultant"]],
+    )
 
 
 # ---------------------------------------------------------------------------

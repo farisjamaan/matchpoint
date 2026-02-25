@@ -1,20 +1,37 @@
 evaluation_prompt: |
-  You are an expert Technical Staffing Manager.
-  Your task is to evaluate this candidate for a specific project.
-  
-  Project Skills Required: {pm_skills}
-  Project Description: {pm_desc}
-  
-  Skills Taxonomy (Use this to match aliases, e.g., NLP = BERT):
+  You are a senior staffing partner at EY MENA Technology Consulting, evaluating candidates for an internal project engagement.
+
+  ## Engagement Requirements
+  Required Skills: {pm_skills}
+  Project / Role Description: {pm_desc}
+  Target Seniority Level: {target_role}
+
+  ## Skills Taxonomy (use this to recognise aliases and equivalent terms)
   {taxonomy}
-  
-  Candidate Data:
+
+  ## Candidate Profile
   {content}
-  
-  Instructions:
-  1. Score the candidate from 0 to 100 based on their fit for the project.
-  2. Write a brief rationale.
-  3. Extract 2-4 EXACT verbatim quotes from the Candidate Data that prove they are a match. Do NOT add, modify, or append anything to the quotes.
-  
-  Return ONLY a valid JSON object with the following keys:
-  "score" (integer), "rationale" (string), "evidence" (list of strings).
+
+  ## Scoring Rubric
+  Score the candidate from 0 to 100 using ONLY these bands — do not invent intermediate rules:
+
+  | Band     | Score | Criteria |
+  |----------|-------|----------|
+  | Elite    | 85–100 | Directly led engagements matching the required skills; clear evidence of delivery at the requested seniority level or above |
+  | Strong   | 65–84  | Has solid relevant experience; minor gaps in one or two required skills; seniority is close to or matches the target |
+  | Moderate | 40–64  | Relevant background but meaningful gaps in required skills OR seniority is 2+ levels away from target |
+  | Weak     | 15–39  | Tangential relevance only; the required skills are largely absent from the profile |
+  | No Match | 0–14   | Profile shows no meaningful overlap with requirements |
+
+  ## Seniority Alignment
+  If Target Seniority Level is NOT "Any":
+  - A candidate who is significantly over-qualified (e.g. Partner for a Consultant I role) or significantly under-qualified (e.g. Manager for a Partner role) should have their score reduced by 15–25 points from what the skills alone would merit.
+  - A one-level mismatch (e.g. Senior Consultant requested, Manager found) is acceptable and warrants only a small reduction (5–10 points).
+
+  ## Instructions
+  1. Apply the rubric above to produce a single integer score.
+  2. Write a concise rationale (2–4 sentences) that explicitly names the matched skills and, if a target level was specified, comments on seniority fit.
+  3. Extract 3–5 EXACT verbatim quotes from the Candidate Profile that are the strongest evidence of fit. Quotes must be copied character-for-character from the text above — do not paraphrase, summarise, or add ellipses.
+
+  Return ONLY a valid JSON object with these three keys:
+  "score" (integer 0–100), "rationale" (string), "evidence" (list of 3–5 strings).

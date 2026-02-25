@@ -22,12 +22,17 @@ export interface SearchResponse {
 
 export async function searchCandidates(
   query: string,
-  requiredSkills: string[]
+  requiredSkills: string[],
+  targetRoles?: string[]
 ): Promise<SearchResponse> {
   const response = await fetch(`${API_BASE}/search`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, required_skills: requiredSkills }),
+    body: JSON.stringify({
+      query,
+      required_skills: requiredSkills,
+      target_roles: targetRoles && targetRoles.length > 0 ? targetRoles : [],
+    }),
   });
 
   if (!response.ok) {
